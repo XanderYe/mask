@@ -49,5 +49,6 @@
       </Button>
       <TextArea fx:id="logArea" editable="false" layoutX="30.0" layoutY="332.0" prefHeight="98.0" prefWidth="319.0" />
       <Button layoutX="258.0" layoutY="448.0" mnemonicParsing="false" onAction="#start" prefHeight="30.0" prefWidth="90.0" text="预约" />
+      <Label alignment="TOP_LEFT" layoutX="3.0" layoutY="482.0" prefHeight="15.0" prefWidth="100.0" text="\@XanderYe" />
    </children>
 </AnchorPane>

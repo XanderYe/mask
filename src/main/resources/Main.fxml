@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.xanderye.controller.MainController">
+   <children>
+      <Label alignment="BASELINE_RIGHT" layoutY="34.0" prefHeight="30.0" prefWidth="80.0" text="姓名">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="nameText" layoutX="100.0" layoutY="34.0" prefHeight="30.0" prefWidth="240.0" />
+      <Label alignment="BASELINE_RIGHT" layoutY="84.0" prefHeight="30.0" prefWidth="80.0" text="身份证">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="BASELINE_RIGHT" layoutY="134.0" prefHeight="30.0" prefWidth="80.0" text="手机号">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="BASELINE_RIGHT" layoutY="184.0" prefHeight="30.0" prefWidth="80.0" text="验证码">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="BASELINE_RIGHT" layoutY="234.0" prefHeight="30.0" prefWidth="80.0" text="街/镇/道">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="BASELINE_RIGHT" layoutY="284.0" prefHeight="30.0" prefWidth="80.0" text="地址">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="idText" layoutX="100.0" layoutY="84.0" prefHeight="30.0" prefWidth="240.0" />
+      <TextField fx:id="phoneText" layoutX="100.0" layoutY="134.0" prefHeight="30.0" prefWidth="240.0" />
+      <TextField fx:id="codeText" layoutX="100.0" layoutY="184.0" prefHeight="30.0" prefWidth="120.0" />
+      <TextField fx:id="addressText" layoutX="100.0" layoutY="284.0" prefHeight="30.0" prefWidth="240.0" />
+      <ComboBox fx:id="townBox" layoutX="100.0" layoutY="234.0" prefHeight="30.0" prefWidth="120.0" />
+      <Button ellipsisString="" layoutX="250.0" layoutY="184.0" mnemonicParsing="false" onAction="#getCode" prefHeight="30.0" prefWidth="90.0" text="发送" textOverrun="CLIP">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <TextArea fx:id="logArea" editable="false" layoutX="30.0" layoutY="332.0" prefHeight="98.0" prefWidth="319.0" />
+      <Button layoutX="258.0" layoutY="448.0" mnemonicParsing="false" onAction="#start" prefHeight="30.0" prefWidth="90.0" text="预约" />
+   </children>
+</AnchorPane>

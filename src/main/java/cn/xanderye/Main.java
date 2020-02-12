@@ -21,7 +21,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
-        primaryStage.setTitle("慈溪市口罩发放预约程序");
+        primaryStage.setTitle("慈溪市口罩发放预约程序@XanderYe");
         primaryStage.setScene(new Scene(root, 380, 500));
         primaryStage.show();
     }

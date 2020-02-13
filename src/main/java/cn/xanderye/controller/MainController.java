@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,96 +88,36 @@ public class MainController implements Initializable {
 
     /**
      * 获取验证码
+     *
      * @param
      * @return void
      * @author yezhendong
      * @date 2020/2/12
      */
     public void getCode() {
-        String phone = phoneText.getText();
-        if (!checkPhone(phone)) {
-            logArea.appendText("手机号错误\n");
-            return;
-        }
-        String authCodeUrl = BASE_URL + "/code/get_code";
-        JSONObject body = new JSONObject();
-        body.put("phone", phone);
-        String result = null;
-        while (true) {
-            logArea.appendText("开始请求\n");
-            if (result != null) {
-                try {
-                    logArea.appendText(formatResult(result) + "\n");
-                } catch (Exception e) {
-                    logArea.appendText("请求结果转换错误：" + result + "\n");
-                }
-                break;
+        ExecutorService singleThread = Executors.newSingleThreadExecutor();
+        singleThread.execute(() -> {
+            String phone = phoneText.getText();
+            if (!checkPhone(phone)) {
+                logArea.appendText("手机号错误\n");
+                return;
             }
-            try {
-                result = HttpUtil.doPost(authCodeUrl, HEADERS, body.toJSONString());
-            }catch (Exception e) {
-                logArea.appendText("请求失败\n");
-            }
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 开始预约
-     * @param
-     * @return void
-     * @author yezhendong
-     * @date 2020/2/12
-     */
-    public void start() {
-        String name = nameText.getText();
-        String idNo = idText.getText();
-        String phone = phoneText.getText();
-        String code = codeText.getText();
-        String town = (String) townBox.getValue();
-        String address = addressText.getText();
-
-        if (!IdCardUtil.validate(idNo)) {
-            logArea.appendText("身份证错误\n");
-            return;
-        }
-        if (!checkPhone(phone)) {
-            logArea.appendText("手机号错误\n");
-            return;
-        }
-
-        if (checkString(name) && checkString(code) && checkString(town) && checkString(address)) {
-            String requestUrl = BASE_URL + "/order/c4ca4238a0b923820dcc509a6f75849b";
-
-            String sign = "address=" + address +
-                    "&code=" + code +
-                    "&id_card=" + idNo +
-                    "&name=" + name +
-                    "&phone=" + phone +
-                    "&town=" + town +
-                    "&secret=godlee";
-            sign = MD5Util.encrypt(sign);
+            String authCodeUrl = BASE_URL + "/code/get_code";
             JSONObject body = new JSONObject();
-            body.put("name", name);
             body.put("phone", phone);
-            body.put("id_card", idNo);
-            body.put("town", town);
-            body.put("code", code);
-            body.put("address", address);
-            body.put("sign", sign);
             String result = null;
             while (true) {
                 logArea.appendText("开始请求\n");
                 if (result != null) {
-                    logArea.appendText(formatResult(result) + "\n");
+                    try {
+                        logArea.appendText(formatResult(result) + "\n");
+                    } catch (Exception e) {
+                        logArea.appendText("请求结果转换错误：" + result + "\n");
+                    }
                     break;
                 }
                 try {
-                    result = HttpUtil.doPost(requestUrl, HEADERS, body.toJSONString());
+                    result = HttpUtil.doPost(authCodeUrl, HEADERS, body.toJSONString());
                 }catch (Exception e) {
                     logArea.appendText("请求失败\n");
                 }
@@ -185,13 +127,84 @@ public class MainController implements Initializable {
                     e.printStackTrace();
                 }
             }
-        } else {
-         logArea.appendText("不能为空\n");
-        }
+        });
+        singleThread.shutdown();
+    }
+
+    /**
+     * 开始预约
+     *
+     * @param
+     * @return void
+     * @author yezhendong
+     * @date 2020/2/12
+     */
+    public void start() {
+        ExecutorService singleThread = Executors.newSingleThreadExecutor();
+        singleThread.execute(() -> {
+            String name = nameText.getText();
+            String idNo = idText.getText();
+            String phone = phoneText.getText();
+            String code = codeText.getText();
+            String town = (String) townBox.getValue();
+            String address = addressText.getText();
+
+            if (!IdCardUtil.validate(idNo)) {
+                logArea.appendText("身份证错误\n");
+                return;
+            }
+            if (!checkPhone(phone)) {
+                logArea.appendText("手机号错误\n");
+                return;
+            }
+
+            if (checkString(name) && checkString(code) && checkString(town) && checkString(address)) {
+                String requestUrl = BASE_URL + "/order/c4ca4238a0b923820dcc509a6f75849b";
+
+                String sign = "address=" + address +
+                        "&code=" + code +
+                        "&id_card=" + idNo +
+                        "&name=" + name +
+                        "&phone=" + phone +
+                        "&town=" + town +
+                        "&secret=godlee";
+                sign = MD5Util.encrypt(sign);
+                JSONObject body = new JSONObject();
+                body.put("name", name);
+                body.put("phone", phone);
+                body.put("id_card", idNo);
+                body.put("town", town);
+                body.put("code", code);
+                body.put("address", address);
+                body.put("sign", sign);
+                String result = null;
+                while (true) {
+                    logArea.appendText("开始请求\n");
+                    if (result != null) {
+                        logArea.appendText(formatResult(result) + "\n");
+                        break;
+                    }
+                    try {
+                        result = HttpUtil.doPost(requestUrl, HEADERS, body.toJSONString());
+                    } catch (Exception e) {
+                        logArea.appendText("请求失败\n");
+                    }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                logArea.appendText("不能为空\n");
+            }
+        });
+        singleThread.shutdown();
     }
 
     /**
      * 检查手机号
+     *
      * @param phone
      * @return boolean
      * @author yezhendong
@@ -207,6 +220,7 @@ public class MainController implements Initializable {
 
     /**
      * 字符串不为空
+     *
      * @param s
      * @return boolean
      * @author yezhendong
@@ -218,6 +232,7 @@ public class MainController implements Initializable {
 
     /**
      * 格式化结果
+     *
      * @param result
      * @return java.lang.String
      * @author yezhendong
@@ -230,7 +245,7 @@ public class MainController implements Initializable {
             String success = Boolean.parseBoolean(jsonObject.getString("success")) ? "成功" : "失败";
             String message = jsonObject.getString("message");
             return MessageFormat.format("错误码：{0}，{1}，信息：{2}", errorCode, success, message);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return result;
         }
     }

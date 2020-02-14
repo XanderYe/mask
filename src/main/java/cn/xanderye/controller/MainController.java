@@ -35,6 +35,14 @@ import java.util.regex.Pattern;
  */
 public class MainController implements Initializable {
 
+    private final String codeUrlV1 = "/code/get_code";
+
+    private final String requestUrlV1 = "/order/c4ca4238a0b923820dcc509a6f75849b";
+
+    private final String codeUrlV2 = "/code/g5f98fdea3cf5f8fef59c2923b8ee6aeb";
+
+    private final String requestUrlV2 = "/order/s5e3712a429b239a6f9c5d8ef0aa609cf";
+
     private final String BASE_URL = "https://kouzhaoserver.cxshzl.com/server/index.php/api/";
 
     private final String[] TOWNS = new String[]{"浒山街道", "古塘街道", "白沙路街道", "宗汉街道", "坎墩街道", "龙山镇", "掌起镇", "观海卫镇", "附海镇", "桥头镇", "匡堰镇", "逍林镇", "新浦镇", "胜山镇", "横河镇", "崇寿镇", "长河镇", "周巷镇", "庵东镇", "杭州湾新区"};
@@ -102,7 +110,7 @@ public class MainController implements Initializable {
                 logArea.appendText("手机号错误\n");
                 return;
             }
-            String authCodeUrl = BASE_URL + "/code/get_code";
+            String authCodeUrl = BASE_URL + codeUrlV2;
             JSONObject body = new JSONObject();
             body.put("phone", phone);
             String result = null;
@@ -119,10 +127,11 @@ public class MainController implements Initializable {
                 try {
                     result = HttpUtil.doPost(authCodeUrl, HEADERS, body.toJSONString());
                 }catch (Exception e) {
+                    e.printStackTrace();
                     logArea.appendText("请求失败\n");
                 }
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -159,7 +168,7 @@ public class MainController implements Initializable {
             }
 
             if (checkString(name) && checkString(code) && checkString(town) && checkString(address)) {
-                String requestUrl = BASE_URL + "/order/c4ca4238a0b923820dcc509a6f75849b";
+                String requestUrl = BASE_URL + requestUrlV2;
 
                 String sign = "address=" + address +
                         "&code=" + code +
@@ -187,10 +196,11 @@ public class MainController implements Initializable {
                     try {
                         result = HttpUtil.doPost(requestUrl, HEADERS, body.toJSONString());
                     } catch (Exception e) {
+                        e.printStackTrace();
                         logArea.appendText("请求失败\n");
                     }
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
